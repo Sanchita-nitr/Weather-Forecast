@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecasting</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="text-center bg-gradient-to-r from-cyan-500 to-white-500">
+    <section class="container p-8 text-center flex flex-col justify-center items-center">
+        <h1 class="text-3xl font-bold p-2 m-2">Weather Forecasting</h1>
+        <p>
+            <input class="border-b-4 border-b-blue-900 rounded-lg p-2 text-xl focus:outline-none" type="text" name=""
+                placeholder="Search city name here..." id="city-name">
+            <button
+                class="border-2 border-teal-800 rounded-lg p-2 text-xl text-center transition ease-in-out delay-150 active:scale-95 bg-gradient-to-r from-emerald-500 to-teal-500 drop-shadow-md hover:drop-shadow-2xl"
+                id="findBtn">Find Weather</button>
+        </p>
+        <section class="result-container p-4 m-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4  gap-4">
+            
+            <div class="weather border-2 p-4 m-4 rounded-lg backdrop-blur-md drop-shadow-xl">
+                <p>Weather:</p>
+                <p class="font-bold" id="weather-description">...</p>
+            </div>
+            <div class="temp border-2 p-4 m-4 rounded-lg backdrop-blur-md drop-shadow-xl">
+                <p>Temperature:</p>
+                <p class="font-bold" id="temp">...</p>
+            </div>
+            <div class="windSpeed border-2 p-4 m-4 rounded-lg backdrop-blur-md drop-shadow-xl">
+                <p>Wind Speed:</p>
+                <p class="font-bold" id="wind-speed">...</p>
+            </div>
+            <div class="humidity border-2 p-4 m-4 rounded-lg backdrop-blur-md drop-shadow-xl">
+                <p>Humidity:</p>
+                <p class="font-bold" id="humidity">...</p>
+            </div>
+        </section>
+    </section>
+
+    <script>
+// input 
+let findBtn = document.querySelector("#findBtn");
+let city = document.querySelector("#city-name");
+
+// output
+let weatherDescription = document.querySelector("#weather-description");
+let temp = document.querySelector("#temp");
+let windSpeed = document.querySelector("#wind-speed");
+let humidity = document.querySelector("#humidity");
+
+function getWeatherAPI() {
+    let apiKey = "9b7937ebb300cad51892915d911f5fcd"; // Your OpenWeatherMap API key
+    let apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&units=metric&APPID=${apiKey}`;
+    fetch(apiURL)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then((data) => {
+            weatherDescription.innerHTML = data.weather[0].description;
+            temp.innerHTML = `${data.main.temp}°C`;
+            windSpeed.innerHTML = `${data.wind.speed}m/s`;
+            humidity.innerHTML = `${data.main.humidity}%`;
+        })
+        .catch(error => {
+            console.error('Error fetching weather data:', error);
+        });
+}
+
+findBtn.addEventListener("click", getWeatherAPI);
+
+    </script>
+
+</body>
+
+</html>
